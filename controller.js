@@ -1,4 +1,6 @@
- myApp = angular.module('mainApp', ['ngRoute']);
+
+
+myApp = angular.module('mainApp', ['ngRoute']);
 
  myApp.config(function($routeProvider) {
  	$routeProvider
@@ -14,20 +16,17 @@
     .when('/dashboard',{
         templateUrl: 'dashboard.html'
     })
-    .when('/registertraining',{
-        templateUrl: 'registertraining.html'
-    })
     .otherwise({
  		redirectTo:'/'
  	});
  });
 
- myApp.controller('loginController', function($rootScope,$scope,$http,$location)
+ myApp.controller('loginController', function($scope,$http,$location)
  {
  	$scope.authenticateUser = function () {
-        var User = { username: $scope.tm.login.username, password: $scope.tm.login.password};
-        console.log(User);
-        $http(
+ 		var User = { username: $scope.tm.login.username, password: $scope.tm.login.password};
+        /*console.log("User Obj = " +this.User);*/
+ 		$http(
 				{   method:'POST',
 					url:"http://localhost:8080/springmvchibernate/login",
 					data: User,
@@ -35,8 +34,8 @@
 				}
 			).success(function(data,status,headers,config) 
 				{
-            $rootScope.role = data.empType;
-            console.log('role in http'+$rootScope.role);
+            console.log("Success");
+            console.log("EmpType: "+data.empType);
 		 	if(data.empType=='TrainingExecutive')
                 $location.path("/admindashboard");
             else if(data.empType=='Trainer')
@@ -44,64 +43,62 @@
             else if(data.empType=='Employee')
                 $location.path('/dashboard');
             else 
-            {
-                $scope.message = 'Username or Password is Wrong';
-                $location.path('/');
-            }    
+                $location.path('/')
                 
 		 }).error(function(data,status,headers,config) 
          {
-                console.log("error occured");
-                $scope.message = 'Server is down. Please try again after some time';
-		 	    $location.path('/');
+                console.log("error occured")
+		 	    $location.path('/')
         });
     }
-    
-    $scope.navbar = function()
-    {
-        var role = $rootScope.role;
-        if(role == 'TrainingExecutive')
-            return 'adminbar.html';
-        else if(role == 'Trainer')
-            return 'trainerbar.html';
-        else if(role == 'Employee')
-            return 'userbar.html';
-        else
-            return '';
-    }
-    
-    $scope.register = function()
-    {
-        console.log($location);
-        $location.path('/dashboard');
-    }
-   
-    
 });
 
- myApp.controller('registerTraining', function($rootScope,$scope,$http,$location)
- {
-     $scope.postData = function()
-     {
-        var training = $scope.training;
-        console.log(training); 
-     
-     
-       $http(
-				{   method:'POST',
-					url:"http://localhost:8080/springmvchibernate/registertraining",
-					data: training,
-					headers: {'Content-Type' : 'application/json'}
-				}
-			).success(function(data,status,headers,config) 
-				{
-                    console.log(data.name);
-                
-		 }).error(function(data,status,headers,config) 
-         {
-                console.log("error occured");
-                $scope.message = 'Server is down. Please try again after some time';
-		 	    $location.path('/');
-        });
-     }
- });
+myApp.controller('delController',function($scope,$http,$location)
+				 {
+	$scope.deleteTraining = function(){
+			alert("I got executed");
+			$http(
+			{
+				method: 'POST',
+				url:"http://localhost:8080/springmvchibernate/delete",
+				data : $scope.training,
+				headers :{'Content-Type' : 'application/json'}
+			
+			}
+				).success(function(data,status,headers,config)
+			{
+			console.log("Delete Training controller");
+			console.log();
+				
+		}).error(function(data,status,headers,config)
+				 {
+			console.log("error");
+			$location.path('/')
+			
+		});
+		
+	}
+});
+
+
+
+/*myApp.controller('',function($scope,$http,$location)
+				 
+				 {
+	$scope.ViewTrainings = function(){
+		$http(
+		{
+			method: 'GET',
+			url:"http://localhost:8080/springmvchibernate/showtable",
+		}
+		).success(function(data,status,headers,config)
+		{
+			console.log("delete training controller ");
+					
+		}).error(function(data,status,headers,config)
+				 {
+			console.log("error in delete training controller");
+			$location.path('/');
+		});
+	}
+});*/

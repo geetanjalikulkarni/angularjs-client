@@ -1,1 +1,22 @@
-You're on admin's dashboard
+You're on admin page
+<html>
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
+	<script type="text/javascript" src="controller.js"></script>
+    </head>
+    <body ng-app="mainApp">
+        <hr>
+        <div ng-controller="delController">
+        Training Name<input type="text" ng-model="training.name">
+        <button type="button" ng-click="deleteTraining()">Delete Training</button>
+		</div>
+		
+		
+		
+		<!--<hr>
+		<div ng-app="showTrainings">
+		<button type="button" ng-click="ViewTrainings()">View All Trainings</button>
+		</div>-->
+    </body>
+</html>
